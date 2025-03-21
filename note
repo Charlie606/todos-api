@@ -1,0 +1,93 @@
+ORM, Prisma ORM documentation
+
+**ORM (Object-Relational Mapping)** is a programming technique that allows you to interact with a relational database using object-oriented code. Essentially, an ORM maps database tables to objects in your code, making it easier to interact with databases without writing raw SQL queries.
+
+ORM helps developers avoid having to write manual SQL queries for CRUD operations (Create, Read, Update, Delete) by abstracting the interaction with the database into high-level object manipulations. This makes database interactions more intuitive, as developers can work with objects instead of worrying about SQL syntax.
+
+### Benefits of ORM:
+1. **Productivity**: Reduces the need to write repetitive SQL code.
+2. **Maintainability**: Easier to maintain code because you’re dealing with objects rather than SQL.
+3. **Portability**: ORM frameworks are often database-agnostic, so you can switch between different relational databases with minimal code changes.
+
+---
+
+**Prisma ORM** is a modern, TypeScript/JavaScript ORM designed to work with databases like MySQL, PostgreSQL, SQLite, and SQL Server. It provides a powerful and type-safe query builder, making it easier to interact with your database while leveraging TypeScript’s type system.
+
+### Key Features of Prisma ORM:
+1. **Type Safety**: Prisma generates types based on your database schema, providing strong type safety for your database queries. This means you'll catch errors like misspelled column names or invalid types at compile-time rather than runtime.
+   
+2. **Database Schema & Migrations**: Prisma has a schema definition file (`schema.prisma`) where you define your models (tables), and it can automatically generate database migrations to reflect changes in your schema.
+   
+3. **Prisma Client**: The main feature is the Prisma Client, which is an auto-generated TypeScript/JavaScript client that allows you to query your database using a fluent API. It replaces writing raw SQL queries and provides methods to perform CRUD operations on your database models.
+   
+4. **Easy to Use**: Prisma aims to make database interactions easier and more intuitive, often providing a cleaner, more readable syntax compared to other ORMs.
+   
+5. **Performance**: Prisma has a focus on performance, providing fast queries and optimized database access.
+
+---
+
+### Example Prisma Usage:
+
+1. **Defining the schema**:  
+   In `schema.prisma`, you define your data models that represent tables.
+
+   ```prisma
+   model User {
+     id      Int    @id @default(autoincrement())
+     name    String
+     email   String @unique
+     posts   Post[]
+   }
+
+   model Post {
+     id      Int    @id @default(autoincrement())
+     title   String
+     content String
+     userId  Int
+     user    User   @relation(fields: [userId], references: [id])
+   }
+   ```
+
+2. **Using Prisma Client**:  
+   After generating Prisma Client, you can use it to interact with the database:
+
+   ```javascript
+   const prisma = new PrismaClient();
+
+   async function main() {
+     const allUsers = await prisma.user.findMany({
+       include: {
+         posts: true,  // Include posts associated with each user
+       },
+     });
+     console.log(allUsers);
+   }
+
+   main()
+     .catch(e => {
+       throw e
+     })
+     .finally(async () => {
+       await prisma.$disconnect()
+     });
+   ```
+
+Prisma makes the process of interacting with a database clean, efficient, and type-safe, especially for modern JavaScript and TypeScript applications.
+
+### Summary:
+- **ORM** is a concept that simplifies database interaction by using object-oriented code.
+- **Prisma ORM** is a specific, modern ORM for JavaScript/TypeScript that provides type safety, an intuitive API, and efficient database interactions, along with tools for managing schema and migrations.
+
+
+js is single threaded but it can be change to multi threaded
+
+
+- JacaScript is a single threaded, non blocking, synchronous concurrent language
+- It has a call stack, an event loop and a callback queue + other APIs
+- V8 is the javascript runtime which has a call stack and a heap
+- The heap is used for memory allocation and the stack holds the execution context
+- DOM, setTimeout, XML HttpRequest don't exists in V8 source code
+
+js is synchronous or asynchronous
+
+Event Loop in node js: ?? 
