@@ -13,26 +13,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User{
+  user_id       Int   @id @default(autoincrement())
+  name          String @db.VarChar(191)
+  email         String @db.VarChar(191) @unique
+  mobile        String @db.VarChar(15) @unique
+  password      String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  
+  todos Todo[]
+  @@map("users")
+}
+
 model Todo {
   id             Int  @id @default(autoincrement())
+  user_id        Int
   title          String  @db.VarChar(100)
-  description    String?
+  description     String?
   status         Boolean @default(false)
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
   
+  user User @relation(fields: [user_id], references: [user_id])
   @@map("todos")
 
 }
 
-model User{
-  user_id       Int   @id @default(autoincrement())
-  name          String @db.VarChar(100)
-  email         String @unique
-  password      String
-  mobile        String @db.VarChar(15)
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  
-  @@map("users")
-}
+
